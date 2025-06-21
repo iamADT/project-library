@@ -1,0 +1,27 @@
+.book-card {
+    width: 300px;
+    padding: 20px;
+    margin: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.book-card-title {
+    color: #333;
+    margin-bottom: 16px;
+}
+
+.book-card-body{
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.active {
+    background-color: #e3f2fd;
+    border-color: #2196f3;
+}
+
+.hidden {
+    display: none;
+}
