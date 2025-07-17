@@ -16,26 +16,65 @@ addBookToLibrary("1984", "George Orwell", 1949);
 addBookToLibrary("Brave New World", "Aldous Huxley", 1932);
 console.log(myLibrary);
 
-const bookContainer = document.getElementById('library-books');
 
-const bookCard = document.createElement('div');
-bookCard.className = 'book-card';
+//display books
+const bookContainer = document.getElementById('library-books-container');
 
-const bookTitle = document.createElement('h3');
-bookTitle.classList.add('book-card-title');
-
-const cardBody = document.createElement('div');
-cardBody.classList.add('book-card-body');
-
-
-
-function displayBooks(){
-  for (let i =1; i<myLibrary.length; i++){
-  const paragraph = document.createElement('p');
-  paragraph.textContent = myLibrary[i]
-  cardBody.appendChild(paragraph);
+function displayBooks() {
+  while (bookContainer.firstChild) {
+  bookContainer.removeChild(bookContainer.firstChild);
 }
-bookCard.appendChild(bookTitle);
-bookCard.appendChild(cardBody);
-bookContainer.appendChild(bookCard);
+
+  myLibrary.forEach(book => {
+    const bookCard = document.createElement('div');
+    bookCard.className = 'book-card';
+
+    const bookTitle = document.createElement('h3');
+    bookTitle.classList.add('book-card-title');
+    bookTitle.textContent = book.name;
+
+    const cardBody = document.createElement('div');
+    cardBody.classList.add('book-card-body');
+
+    const bookDetails = document.createElement('p');
+    bookDetails.textContent = `Author: ${book.author}, Year: ${book.year}`;
+
+    cardBody.appendChild(bookDetails);
+    bookCard.appendChild(bookTitle);
+    bookCard.appendChild(cardBody);
+    bookContainer.appendChild(bookCard);
+  });
 }
+
+displayBooks();
+
+//user adds books
+const addBookButton = document.getElementById('add-a-book');
+const closeButton = document.getElementById('close-modal');
+const modal = document.getElementById('book-modal');
+const submitButton = document.getElementById('submit-book')
+
+addBookButton.addEventListener('click', () =>{
+  modal.classList.remove('hidden');
+}
+)
+
+submitButton.addEventListener('click', function(){
+  event.preventDefault();
+  const title = document.getElementById('title').value.trim();
+  const author = document.getElementById('author').value.trim();
+  const year = document.getElementById('year').value;
+  addBookToLibrary(title, author, year);
+  displayBooks();
+  modal.classList.add('hidden');
+})
+
+closeButton.addEventListener('click', () => {
+  modal.classList.add('hidden');
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    modal.classList.add('hidden');
+  }
+});
