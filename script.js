@@ -1,10 +1,12 @@
+// Array to hold the books
 const myLibrary = [];
 
-function Book(name, author, yearPublished) {
+function Book(name, author, yearPublished, status = 'Unread') {
   this.id = crypto.randomUUID();
   this.name = name;
   this.author = author;
   this.year = yearPublished;
+  this.status = status;
 }
 
 function addBookToLibrary(name, author, yearPublished) {
@@ -37,11 +39,52 @@ function displayBooks() {
     cardBody.classList.add('book-card-body');
 
     const bookDetails = document.createElement('p');
-    bookDetails.textContent = `Author: ${book.author}, Year: ${book.year}`;
+    bookDetails.textContent = `Author: ${book.author}, Year: ${book.year}`; 
+
+    //delete a book
+    const deleteBook = document.createElement('img');
+    deleteBook.classList.add('delete-book');
+    deleteBook.src = './assets/trash-solid.svg';
+    
+    deleteBook.addEventListener('click', () => {
+    const index = myLibrary.findIndex(item => item.id === book.id);
+    if (index !==-1){
+    myLibrary.splice(index, 1);
+    displayBooks();
+      }
+    });
+
+
+    //mark book as read/unread
+    const statusPill = document.createElement('div');
+    statusPill.className = book.status === 'Read' ? 'status-read' : 'status-pill';
+    const readStatus = document.createElement('p');
+    readStatus.textContent = book.status;
+    statusPill.appendChild(readStatus);
+
+    statusPill.addEventListener('click', () => {
+      if (book.status === 'Unread') {
+        book.status = 'Read';
+        readStatus.textContent = 'Read';
+        statusPill.className = 'status-read';
+      } else {
+        book.status = 'Unread';
+        readStatus.textContent = 'Unread';
+        statusPill.className = 'status-pill';
+      }
+    });
+
+    
+    //Append content
+    const bookCardContent = document.createElement('div');
+    bookCardContent.classList.add('book-content');
 
     cardBody.appendChild(bookDetails);
-    bookCard.appendChild(bookTitle);
-    bookCard.appendChild(cardBody);
+    bookCardContent.appendChild(statusPill);
+    bookCardContent.appendChild(bookTitle);
+    bookCardContent.appendChild(cardBody);
+    bookCard.appendChild(bookCardContent);
+    bookCard.appendChild(deleteBook);
     bookContainer.appendChild(bookCard);
   });
 }
@@ -59,7 +102,7 @@ addBookButton.addEventListener('click', () =>{
 }
 )
 
-submitButton.addEventListener('click', function(){
+submitButton.addEventListener('click', function(event){
   event.preventDefault();
   const title = document.getElementById('title').value.trim();
   const author = document.getElementById('author').value.trim();
@@ -78,3 +121,4 @@ document.addEventListener('keydown', (e) => {
     modal.classList.add('hidden');
   }
 });
+
